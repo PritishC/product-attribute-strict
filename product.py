@@ -227,8 +227,13 @@ class ProductProductAttribute(ModelSQL, ModelView):
 
     @fields.depends('product')
     def on_change_product(self):
-        if self.product and self.product.template.attribute_set:
-            return {'attribute_set': self.product.template.attribute_set.id}
+        if self.product:
+            return {
+                'attribute_set': (
+                    self.product.template.attribute_set and
+                    self.product.template.attribute_set.id or None
+                )
+            }
         return {}
 
 
